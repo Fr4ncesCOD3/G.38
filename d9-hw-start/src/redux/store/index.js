@@ -1,7 +1,7 @@
 // Importiamo configureStore da Redux Toolkit che ci aiuta a creare lo store
 import { configureStore } from '@reduxjs/toolkit'
 // Importiamo il nostro reducer principale che gestisce lo stato dell'app
-import mainReducer from '../reducers'
+import rootReducer from '../reducers'
 
 // Creiamo un middleware personalizzato per loggare le azioni e i cambiamenti di stato
 // (Un middleware è una funzione che viene eseguita tra il dispatch di un'azione e il reducer)
@@ -21,7 +21,7 @@ const loggerMiddleware = store => next => action => {
 // Creiamo lo store Redux usando configureStore
 const store = configureStore({
   // Specifichiamo il reducer principale che gestirà lo stato
-  reducer: mainReducer,
+  reducer: rootReducer,
   // Aggiungiamo il nostro middleware di logging a quelli predefiniti
   // getDefaultMiddleware() ottiene i middleware predefiniti di Redux Toolkit
   // concat() aggiunge il nostro middleware personalizzato alla lista

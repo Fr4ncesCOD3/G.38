@@ -1,32 +1,47 @@
 // Importiamo i componenti necessari da React Bootstrap per creare la barra di navigazione
+// Container: un contenitore che centra e aggiunge margini al contenuto
+// Nav: il componente base per creare menu di navigazione
+// Navbar: la barra di navigazione principale
+// NavDropdown: un menu a tendina per raggruppare più link
+// Image: componente per mostrare immagini in modo ottimizzato
 import { Container, Nav, Navbar, NavDropdown, Image } from 'react-bootstrap'
-// Importiamo i componenti per la navigazione e il routing
+
+// Link: permette di creare link tra le pagine senza ricaricare la pagina
+// useNavigate: un hook che permette di cambiare pagina via codice
 import { Link, useNavigate } from 'react-router-dom'
-// Importiamo gli hook di Redux per gestire lo stato globale
+
+// useSelector: hook per leggere dati dallo store Redux
+// useDispatch: hook per inviare azioni allo store Redux
 import { useSelector, useDispatch } from 'react-redux'
 
-// Componente per la barra di navigazione
+// Questo è il componente principale della barra di navigazione
 const NavigationBar = () => {
-  // Otteniamo i dati dell'utente dallo store Redux
+  // Leggiamo i dati dell'utente dallo store Redux
+  // Se non c'è un utente loggato, user sarà null
   const user = useSelector(state => state.user)
-  // Otteniamo la funzione dispatch per inviare azioni a Redux
+  
+  // dispatch è una funzione che usiamo per inviare azioni a Redux
+  // è come un postino che consegna messaggi allo store
   const dispatch = useDispatch()
-  // Otteniamo la funzione navigate per la navigazione programmatica
+  
+  // navigate è una funzione che usiamo per cambiare pagina
+  // esempio: navigate('/profile') ci porta alla pagina del profilo
   const navigate = useNavigate()
 
-  // Funzione che gestisce il logout dell'utente
+  // Questa funzione viene chiamata quando l'utente clicca su "Logout"
   const handleLogout = () => {
-    // Inviamo l'azione di logout a Redux
+    // Inviamo un'azione a Redux per dire che l'utente sta facendo logout
     dispatch({ type: 'LOGOUT' })
-    // Reindirizziamo l'utente alla home
+    // Dopo il logout, riportiamo l'utente alla home page
     navigate('/')
   }
 
   return (
-    // Navbar con sfondo bianco, espandibile su schermi grandi e ombreggiatura
+    // La Navbar principale con sfondo bianco e una leggera ombra
+    // expand="lg" significa che il menu si espande su schermi grandi
     <Navbar bg="white" expand="lg" className="mb-3 shadow-sm">
       <Container>
-        {/* Logo di LinkedIn che porta alla home quando cliccato */}
+        {/* Il logo di LinkedIn che funziona anche come link alla home */}
         <Navbar.Brand as={Link} to="/">
           <img 
             src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.freepnglogos.com%2Fuploads%2Fofficial-linkedin-logo----17.png&f=1&nofb=1&ipt=e5d433ce22edaadac1189f0bc3c465cfa3c82f0ae447e48341476007d7eca99f&ipo=images" 
@@ -35,18 +50,20 @@ const NavigationBar = () => {
             className="d-inline-block align-top"
           />
         </Navbar.Brand>
-        {/* Pulsante hamburger per menu mobile */}
+        {/* Il pulsante che appare su mobile per aprire/chiudere il menu */}
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        {/* Contenuto della navbar che si collassa su mobile */}
+        {/* Questa parte si nasconde dietro il pulsante hamburger su mobile */}
         <Navbar.Collapse id="basic-navbar-nav">
-          {/* Links di navigazione principali */}
+          {/* Links principali a sinistra */}
           <Nav className="me-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/jobs">Lavori</Nav.Link>
           </Nav>
           {/* Menu utente sulla destra */}
           <Nav>
-            {/* Mostra menu dropdown se l'utente è loggato, altrimenti mostra login/signup */}
+            {/* Usiamo un operatore ternario per mostrare contenuti diversi in base allo stato dell'utente
+                Se user esiste (utente loggato) mostriamo il menu dropdown
+                Altrimenti mostriamo il link per accedere */}
             {user ? (
               <NavDropdown 
                 title={
@@ -65,10 +82,7 @@ const NavigationBar = () => {
                 <NavDropdown.Item onClick={handleLogout}>Logout</NavDropdown.Item>
               </NavDropdown>
             ) : (
-              <>
-                <Nav.Link as={Link} to="/login">Accedi</Nav.Link>
-                <Nav.Link as={Link} to="/signup">Registrati</Nav.Link>
-              </>
+              <Nav.Link as={Link} to="/login">Accedi</Nav.Link>
             )}
           </Nav>
         </Navbar.Collapse>
@@ -77,5 +91,5 @@ const NavigationBar = () => {
   )
 }
 
-// Esportiamo il componente per usarlo in altre parti dell'app
+// Esportiamo il componente per poterlo importare in altre parti dell'applicazione
 export default NavigationBar 

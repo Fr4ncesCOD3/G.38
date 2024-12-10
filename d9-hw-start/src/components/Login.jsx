@@ -1,73 +1,93 @@
-// Importiamo i componenti necessari da React Bootstrap per creare il form di login
-import { Container, Row, Col, Form, Button, Card } from 'react-bootstrap'
-// Importiamo useState per gestire lo stato del form
+// Importiamo i componenti di React Bootstrap che ci servono per creare una bella interfaccia
+// Container = un contenitore che tiene tutto ordinato
+// Row = una riga che può contenere colonne
+// Col = una colonna che può contenere contenuto
+// Form = per creare moduli da compilare
+// Button = per creare pulsanti cliccabili
+// Card = un riquadro con bordi e ombra per raggruppare contenuti
+// Modal = una finestra che appare sopra la pagina
+import { Container, Row, Col, Form, Button, Card, Modal } from 'react-bootstrap'
+
+// useState è una funzione speciale di React che ci permette di salvare dati che possono cambiare
 import { useState } from 'react'
-// Importiamo useDispatch per inviare azioni a Redux
+
+// useDispatch è una funzione che ci permette di inviare messaggi a Redux (il nostro "magazzino" di dati)
 import { useDispatch } from 'react-redux'
-// Importiamo useNavigate per la navigazione programmatica
+
+// useNavigate ci permette di cambiare pagina quando vogliamo
 import { useNavigate } from 'react-router-dom'
 
-// Componente Login che gestisce il form di accesso
+// Questo è il nostro componente Login - è come una pagina web dove gli utenti possono accedere
 const Login = () => {
-  // Creiamo due stati per email e password usando useState
-  const [email, setEmail] = useState('') // Stato per l'email
-  const [password, setPassword] = useState('') // Stato per la password
+  // Creiamo delle "scatole" dove salvare l'email e la password che l'utente scrive
+  // setEmail e setPassword sono funzioni che useremo per aggiornare questi valori
+  const [email, setEmail] = useState('') // All'inizio l'email è vuota
+  const [password, setPassword] = useState('') // All'inizio la password è vuota
+  const [showModal, setShowModal] = useState(false) // Questo controlla se mostrare il messaggio di benvenuto
   
-  // Otteniamo la funzione dispatch per inviare azioni a Redux
+  // Prepariamo la funzione dispatch che useremo per inviare dati a Redux
   const dispatch = useDispatch()
-  // Otteniamo la funzione navigate per cambiare pagina
+  // Prepariamo la funzione navigate che useremo per cambiare pagina
   const navigate = useNavigate()
 
-  // Funzione che gestisce l'invio del form
+  // Questa funzione viene chiamata quando l'utente clicca su "Accedi"
   const handleSubmit = (e) => {
-    e.preventDefault() // Preveniamo il comportamento di default del form
-    // Simula login - in un'app reale, qui faresti una chiamata API
+    e.preventDefault() // Questo impedisce alla pagina di ricaricarsi quando inviamo il form
+    // Qui fingiamo di fare il login - in un'app vera qui ci collegheremmo a un server
     dispatch({
-      type: 'SET_USER', // Azione per impostare i dati utente
+      type: 'SET_USER', // Diciamo a Redux che stiamo impostando un nuovo utente
       payload: {
-        email, // Usiamo l'email inserita
-        name: 'Utente Demo', // Nome demo fisso
-        avatar: 'https://via.placeholder.com/150' // Avatar demo fisso
+        email, // Usiamo l'email che l'utente ha scritto
+        name: 'Utente Demo', // Per ora usiamo un nome fisso
+        avatar: 'https://via.placeholder.com/150' // E un'immagine del profilo fissa
       }
     })
-    navigate('/profile') // Dopo il login, andiamo alla pagina profilo
+    
+    // Mostriamo il messaggio di benvenuto
+    setShowModal(true)
+  }
+
+  // Questa funzione viene chiamata quando chiudiamo il messaggio di benvenuto
+  const handleCloseModal = () => {
+    setShowModal(false) // Nascondiamo il messaggio
+    navigate('/') // Andiamo alla pagina principale
   }
 
   return (
-    // Container principale con margine verticale
+    // Container è come una scatola che tiene tutto in ordine
     <Container className="my-5">
-      {/* Riga centrata */}
+      {/* Row è una riga che centra il contenuto orizzontalmente */}
       <Row className="justify-content-center">
-        {/* Colonna che occupa metà larghezza su desktop */}
+        {/* Col è una colonna che occupa metà dello spazio su schermi grandi */}
         <Col md={6}>
-          {/* Card per contenere il form */}
+          {/* Card è come un foglio di carta con un'ombra */}
           <Card>
             <Card.Body>
-              {/* Titolo del form */}
+              {/* Il titolo della nostra pagina di login */}
               <h2 className="text-center mb-4">Accedi</h2>
-              {/* Form che chiama handleSubmit quando viene inviato */}
+              {/* Form è il modulo che l'utente deve compilare */}
               <Form onSubmit={handleSubmit}>
-                {/* Gruppo per il campo email */}
+                {/* Questo è il gruppo per l'input dell'email */}
                 <Form.Group className="mb-3">
                   <Form.Label>Email</Form.Label>
                   <Form.Control 
-                    type="email" // Input di tipo email
-                    value={email} // Valore controllato dallo stato
-                    onChange={(e) => setEmail(e.target.value)} // Aggiorna lo stato
-                    required // Campo obbligatorio
+                    type="email" // Questo dice che vogliamo un'email
+                    value={email} // Il valore corrente dell'email
+                    onChange={(e) => setEmail(e.target.value)} // Quando l'utente scrive, aggiorniamo l'email
+                    required // L'utente deve compilare questo campo
                   />
                 </Form.Group>
-                {/* Gruppo per il campo password */}
+                {/* Questo è il gruppo per l'input della password */}
                 <Form.Group className="mb-3">
                   <Form.Label>Password</Form.Label>
                   <Form.Control 
-                    type="password" // Input di tipo password (nascosto)
-                    value={password} // Valore controllato dallo stato
-                    onChange={(e) => setPassword(e.target.value)} // Aggiorna lo stato
-                    required // Campo obbligatorio
+                    type="password" // Questo nasconde la password mentre viene scritta
+                    value={password} // Il valore corrente della password
+                    onChange={(e) => setPassword(e.target.value)} // Quando l'utente scrive, aggiorniamo la password
+                    required // L'utente deve compilare questo campo
                   />
                 </Form.Group>
-                {/* Pulsante di invio che occupa tutta la larghezza */}
+                {/* Il pulsante per inviare il form */}
                 <Button variant="primary" type="submit" className="w-100">
                   Accedi
                 </Button>
@@ -76,9 +96,25 @@ const Login = () => {
           </Card>
         </Col>
       </Row>
+
+      {/* Questo è il messaggio di benvenuto che appare dopo il login */}
+      <Modal show={showModal} onHide={handleCloseModal} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Benvenuto!</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>Sei pronto per iniziare la tua ricerca del lavoro dei sogni?</p>
+          <p>Esplora le offerte disponibili e salva quelle che ti interessano nei preferiti!</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={handleCloseModal}>
+            Inizia a cercare
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </Container>
   )
 }
 
-// Esportiamo il componente per usarlo in altre parti dell'app
+// Rendiamo il nostro componente Login disponibile per altre parti dell'applicazione
 export default Login 

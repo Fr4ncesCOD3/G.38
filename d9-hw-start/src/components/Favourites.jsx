@@ -7,8 +7,8 @@ import { Link } from 'react-router-dom'
 
 // Componente che mostra la lista delle aziende preferite
 const Favourites = () => {
-  // Otteniamo l'array dei preferiti dallo store Redux
-  const favourites = useSelector(state => state.favourites)
+  // Modifichiamo il selector per accedere all'array corretto
+  const favourites = useSelector(state => state.favourites.favourites)
   // Otteniamo la funzione dispatch per inviare azioni a Redux
   const dispatch = useDispatch()
 
